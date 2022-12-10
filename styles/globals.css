@@ -3,3 +3,8 @@
 @tailwind utilities;
 
 
+@layer components {
+    .button{
+        @apply cursor-pointer rounded-full border hover:shadow-lg py-2 px-4 active:bg-gray-100 active:scale-95 transform duration-100 ease-out;
+    }
+}

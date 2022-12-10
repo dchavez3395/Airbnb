@@ -1,25 +1,60 @@
 import Image from 'next/image'
 import {GlobeAltIcon, UserCircleIcon, MenuIcon, UsersIcon, SearchIcon} from '@heroicons/react/solid'
-import { useState } from 'react';
+import { useState } from 'react'
+import 'react-date-range/dist/styles.css'
+import 'react-date-range/dist/theme/default.css'
+import { DateRangePicker } from 'react-date-range'
+import { useRouter } from 'next/router'
 
 
-function Header() {
+function Header({placeholder}) {
   const [profile, setProfile] = useState(false)
   const handleProfile = () => {
       setProfile(!profile)
 };
+
+const resetInput = () => {
+  setSeachInput("")
+}
+
+const handleSelect = (ranges) => {
+  setStartDate(ranges.selection.startDate);
+  setEndDate(ranges.selection.endDate);
+}
+
+const [searchInput, setSeachInput] = useState('')
+const [startDate, setStartDate] = useState(new Date());
+const [endDate, setEndDate] = useState(new Date());
+const [numberOfGuests, setNumberGuests] = useState(1)
+const router = useRouter();
+
+const selectionRange = {
+  startDate: startDate,
+  endDate:endDate,
+  key: 'selection'
+}
+
+const search = () => {
+  router.push({
+    pathname: '/search',
+    query: {
+      location: searchInput,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      numberOfGuests,
+    }
+  })
+}
+
   return (
-    <header className='bg-white z-50 shadow-md sticky top-0 p-5 grid grid-cols-3'>
-      <div className='flex cursor-pointer relative my-auto items-center'>
-        <Image src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/1200px-Airbnb_Logo_B%C3%A9lo.svg.png' height={160} width={160} objectFit='contain' objectPosition='left' alt='/' />
+    <header className='bg-white z-50 shadow-md m-auto justify-center items-center sticky top-0 p-5 grid grid-cols-3'>
+      <div onClick={() => router.push("/")} className='flex cursor-pointer relative my-auto items-center'>
+          <Image src='https://upload.wikimedia.org/wikipedia/commons/thumb/6/69/Airbnb_Logo_B%C3%A9lo.svg/1200px-Airbnb_Logo_B%C3%A9lo.svg.png' height={160} width={160} objectFit='contain' objectPosition='left' alt='/' />
       </div>
-
-
     <div className='rounded-full items-center py-2 flex md:border-2'>
-        <input type="text" className='outline-none bg-transparent flex-grow pl-5 placeholder-gray-400 text-sm text-gray-400'  placeholder='Where to?'/>
+        <input type="text" value={searchInput} onChange={(e) => setSeachInput(e.target.value)} className='outline-none bg-transparent flex-grow pl-5 placeholder-gray-400 text-sm text-gray-400'  placeholder={placeholder || 'Where to?'}/>
         <SearchIcon className='bg-red-400 text-white rounded-full cursor-pointer hidden md:block h-8 w-8 p-2 md:mx-2'/>
     </div>
-
     <div className='justify-end text-gray-500 flex space-x-4 items-center'>
         <p className='cursor-pointer hidden md:inline'>Airbnb your home</p>
         <GlobeAltIcon className='cursor-pointer h-6' />
@@ -39,6 +74,20 @@ function Header() {
             </div>
         </div>
     </div>
+    {searchInput && (
+          <div className='mx-auto flex flex-col col-span-3 py-4'>
+            <DateRangePicker ranges={[selectionRange]} rangeColors={['#fd5b61']} minDate={new Date()} onChange={handleSelect} />
+            <div className='mb-4 border-b items-center flex'>
+              <h2 className='font-semibold flex-grow text-2xl'>Number of Guests</h2>
+              <UsersIcon className='h-5' />
+              <input type="number" value={numberOfGuests} onChange={(e) => setNumberGuests(e.target.value)} min={1} className='text-lg text-red-400 w-12 pl-2 outline-none' />
+            </div>
+            <div className='flex'>
+              <button className='flex-grow text-gray-500' onClick={resetInput}>Cancel</button>
+              <button className='flex-grow text-red-400' onClick={search}>Search</button>
+            </div>
+          </div>
+        )}
     </header>
   )
 }

@@ -5,9 +5,11 @@ import SmCard from "../components/SmCard";
 import MidCard from "../components/MidCard";
 import LgCard from "../components/LgCard";
 import Footer from "../components/Footer";
+import { useRouter } from "next/router";
 
 
 const Home = ( {exploreData, cardData} ) => {
+
   return (
     <>
       <Head>
