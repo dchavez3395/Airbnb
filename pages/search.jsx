@@ -33,8 +33,8 @@ const Search = ({searchResults}) => {
                     <RentalCard key={img} img={img} location={location} title={title} description={description} star={star} price={price} total={total} />
                 ))}
             </section>
-            <section className='xl:min-w-[600px] hidden xl:inline-flex'>
-                <Map />
+            <section className='xl:min-w-[600px] hidden xl:inline-flex overflow-hidden'>
+                <Map searchResults={searchResults} />
             </section>
         </main>
         <Footer />
@@ -46,7 +46,7 @@ export default Search
 
 
 export async function getServerSideProps(){
-    const searchResults = await fetch("https://www.jsonkeeper.com/b/HHER").then(res => res.json());
+    const searchResults = await fetch("https://www.jsonkeeper.com/b/P976").then(res => res.json());
 
     return {
         props: {

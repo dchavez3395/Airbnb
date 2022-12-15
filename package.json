@@ -12,6 +12,7 @@
     "@badrap/bar-of-progress": "^0.2.2",
     "@heroicons/react": "^1.0.6",
     "date-fns": "^2.29.3",
+    "geolib": "^3.3.3",
     "next": "13.0.6",
     "react": "^18.2.0",
     "react-date-range": "^1.4.0",
